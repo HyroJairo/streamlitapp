@@ -162,6 +162,39 @@ header {visibility: hidden;}
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
+
+/* Input field styling */
+.stTextInput > div > div > input {
+    background: linear-gradient(135deg, #fef7f7 0%, #f0f8f0 100%);
+    border: 2px solid #e8e8e8;
+    border-radius: 15px;
+    color: #555;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+}
+
+.stTextInput > div > div > input:focus {
+    border-color: #ff9a9e;
+    box-shadow: 0 0 0 2px rgba(255, 154, 158, 0.2);
+    outline: none;
+}
+
+/* Checkbox styling */
+.stCheckbox > label > div {
+    background: linear-gradient(135deg, #fef7f7 0%, #f0f8f0 100%);
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+}
+
+/* Better text visibility */
+.stMarkdown p, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    color: #333 !important;
+}
+
+/* Footer text visibility */
+div[data-testid="stMarkdownContainer"] p {
+    color: #555 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -227,7 +260,7 @@ with col1:
     st.markdown(f"""
     <div class="stats-card">
         <h3 style="color: #ff9a9e; margin: 0;">📋 Total</h3>
-        <h2 style="margin: 0.5rem 0;">{total_tasks}</h2>
+        <h2 style="margin: 0.5rem 0; color: #333;">{total_tasks}</h2>
     </div>
     """, unsafe_allow_html=True)
 
@@ -236,7 +269,7 @@ with col2:
     st.markdown(f"""
     <div class="stats-card">
         <h3 style="color: #a8e6cf; margin: 0;">✅ Done</h3>
-        <h2 style="margin: 0.5rem 0;">{completed_tasks}</h2>
+        <h2 style="margin: 0.5rem 0; color: #333;">{completed_tasks}</h2>
     </div>
     """, unsafe_allow_html=True)
 
@@ -245,19 +278,17 @@ with col3:
     st.markdown(f"""
     <div class="stats-card">
         <h3 style="color: #ffd3a5; margin: 0;">⏳ Pending</h3>
-        <h2 style="margin: 0.5rem 0;">{pending_tasks}</h2>
+        <h2 style="margin: 0.5rem 0; color: #333;">{pending_tasks}</h2>
     </div>
     """, unsafe_allow_html=True)
 
 with col4:
     category_tasks = len(st.session_state.todos[current_cat])
-    # Show "Not Started" instead of "Games" for the fourth card
-    display_label = "Not Started" if current_cat == "Games" else current_cat
-    display_icon = "🚀" if current_cat == "Games" else category_icons[current_cat]
+    # Always show "Unstarted" for the fourth card regardless of category
     st.markdown(f"""
     <div class="stats-card">
-        <h3 style="color: {category_colors[current_cat]}; margin: 0;">{display_icon} {display_label}</h3>
-        <h2 style="margin: 0.5rem 0;">{category_tasks}</h2>
+        <h3 style="color: {category_colors[current_cat]}; margin: 0;">🚀 Unstarted</h3>
+        <h2 style="margin: 0.5rem 0; color: #333;">{category_tasks}</h2>
     </div>
     """, unsafe_allow_html=True)
 
@@ -328,7 +359,7 @@ if st.session_state.todos[current_cat]:
                 <p style="margin: 0; font-size: 1.1rem; {task_style}">
                     {todo['task']}
                 </p>
-                <small style="color: #888;">
+                <small style="color: #666;">
                     Added: {todo['created'].strftime('%Y-%m-%d %H:%M')}
                 </small>
             </div>
@@ -371,7 +402,7 @@ else:
 # Footer
 st.markdown("---")
 st.markdown("""
-<div style="text-align: center; padding: 1rem; color: #888;">
+<div style="text-align: center; padding: 1rem; color: #555;">
     <p>🌈 Made with ❤️ using Streamlit | Stay organized, stay colorful! ✨</p>
 </div>
 """, unsafe_allow_html=True)
