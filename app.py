@@ -5,7 +5,7 @@ import uuid
 
 # Page configuration
 st.set_page_config(
-    page_title="Rainbow To-Do List",
+    page_title="To-Do List",
     page_icon="🌈",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -18,6 +18,7 @@ st.markdown("""
 .main .block-container {
     padding-top: 2rem;
     max-width: 1200px;
+    background-color: #f8f9fa;
 }
 
 /* Header styling */
@@ -133,6 +134,8 @@ st.markdown("""
     text-align: center;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     margin: 0.5rem;
+    min-width: 120px;
+    width: 100%;
 }
 
 /* Hide Streamlit elements */
@@ -243,9 +246,12 @@ with col3:
 
 with col4:
     category_tasks = len(st.session_state.todos[current_cat])
+    # Show "Not Started" instead of "Games" for the fourth card
+    display_label = "Not Started" if current_cat == "Games" else current_cat
+    display_icon = "🚀" if current_cat == "Games" else category_icons[current_cat]
     st.markdown(f"""
     <div class="stats-card">
-        <h3 style="color: {category_colors[current_cat]}; margin: 0;">{category_icons[current_cat]} {current_cat}</h3>
+        <h3 style="color: {category_colors[current_cat]}; margin: 0;">{display_icon} {display_label}</h3>
         <h2 style="margin: 0.5rem 0;">{category_tasks}</h2>
     </div>
     """, unsafe_allow_html=True)
