@@ -14,11 +14,16 @@ st.set_page_config(
 # Custom CSS for light rainbow theme and fluid scrolling
 st.markdown("""
 <style>
+/* Global background styling */
+.stApp {
+    background-color: white;
+}
+
 /* Main app styling */
 .main .block-container {
     padding-top: 2rem;
     max-width: 1200px;
-    background-color: #f8f9fa;
+    background-color: white;
 }
 
 /* Header styling */
