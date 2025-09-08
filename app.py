@@ -5,142 +5,24 @@ import uuid
 
 # Page configuration
 st.set_page_config(
-    page_title="To-Do List",
-    page_icon="🌈",
+    page_title="Media Tracker",
+    page_icon="📱",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for light rainbow theme and fluid scrolling
+# Custom CSS for modern tile design
 st.markdown("""
 <style>
-/* Global background styling */
+/* Global styling */
 .stApp {
-    background-color: white;
+    background-color: #f8f9fa;
 }
 
-/* Main app styling */
 .main .block-container {
     padding-top: 2rem;
-    max-width: 1200px;
-    background-color: white;
-}
-
-/* Header styling */
-.main-header {
-    text-align: center;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 25%, #fecfef 50%, #a8e6cf 75%, #88d8c0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.subtitle {
-    text-align: center;
-    color: #666;
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-}
-
-/* Category tabs */
-.category-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 2rem 0;
-    flex-wrap: wrap;
-}
-
-/* Category specific colors */
-.movies-theme {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-}
-
-.shows-theme {
-    background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
-}
-
-.music-theme {
-    background: linear-gradient(135deg, #ffd3a5 0%, #fd9853 100%);
-}
-
-.games-theme {
-    background: linear-gradient(135deg, #a8c8ec 0%, #7fcdff 100%);
-}
-
-/* Todo item styling */
-.todo-item {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    padding: 1rem;
-    margin: 0.5rem 0;
-    border-left: 5px solid;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-
-.todo-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-
-.todo-item.completed {
-    opacity: 0.7;
-    background: rgba(200, 255, 200, 0.3);
-}
-
-.todo-item.movies { border-left-color: #ff9a9e; }
-.todo-item.shows { border-left-color: #a8e6cf; }
-.todo-item.music { border-left-color: #ffd3a5; }
-.todo-item.games { border-left-color: #a8c8ec; }
-
-/* Scrollable container */
-.scrollable-container {
-    max-height: 500px;
-    overflow-y: auto;
-    padding-right: 10px;
-    scrollbar-width: thin;
-    scrollbar-color: #ff9a9e #f1f1f1;
-}
-
-.scrollable-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.scrollable-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.scrollable-container::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #ff9a9e, #a8e6cf);
-    border-radius: 10px;
-}
-
-/* Form styling */
-.add-form {
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    padding: 2rem;
-    margin: 2rem 0;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-/* Stats cards */
-.stats-card {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-    padding: 1.5rem;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin: 0.5rem;
-    min-width: 120px;
-    width: 100%;
+    max-width: 800px;
+    background-color: #f8f9fa;
 }
 
 /* Hide Streamlit elements */
@@ -148,261 +30,297 @@ st.markdown("""
 footer {visibility: hidden;}
 header {visibility: hidden;}
 
-/* Custom button styling */
-.stButton > button {
-    background: linear-gradient(135deg, #ff9a9e 0%, #a8e6cf 100%);
-    border: none;
-    border-radius: 25px;
+/* Tile container */
+.tile-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Base tile styling */
+.tile {
+    border-radius: 20px;
+    padding: 30px 25px;
     color: white;
     font-weight: 600;
+    font-size: 1.4rem;
+    text-align: left;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
-.stButton > button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+.tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15);
 }
 
-/* Input field styling */
-.stTextInput > div > div > input {
-    background: linear-gradient(135deg, #fef7f7 0%, #f0f8f0 100%);
-    border: 2px solid #e8e8e8;
+/* Tile gradients */
+.tile-music {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.tile-movies {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.tile-tvshows {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.tile-videogames {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+/* Expanded tile styling */
+.tile.expanded {
+    grid-column: 1 / -1;
+    min-height: 400px;
+    padding: 30px;
+}
+
+.tile-content {
+    margin-top: 20px;
+    display: none;
+}
+
+.tile.expanded .tile-content {
+    display: block;
+}
+
+/* Form styling within tiles */
+.tile-form {
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
-    color: #555;
+    padding: 20px;
+    margin-top: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.tile-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
     font-size: 1rem;
-    padding: 0.75rem 1rem;
+    margin-bottom: 10px;
 }
 
-.stTextInput > div > div > input:focus {
-    border-color: #ff9a9e;
-    box-shadow: 0 0 0 2px rgba(255, 154, 158, 0.2);
-    outline: none;
+.tile-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-right: 10px;
 }
 
-/* Checkbox styling */
-.stCheckbox > label > div {
-    background: linear-gradient(135deg, #fef7f7 0%, #f0f8f0 100%);
-    border: 2px solid #e8e8e8;
-    border-radius: 8px;
+.tile-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Better text visibility */
-.stMarkdown p, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
-    color: #333 !important;
+/* Item list styling */
+.item-list {
+    margin-top: 15px;
 }
 
-/* Footer text visibility */
-div[data-testid="stMarkdownContainer"] p {
-    color: #555 !important;
+.item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.item-text {
+    color: white;
+    font-weight: 500;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .tile-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .tile {
+        min-height: 100px;
+        padding: 25px 20px;
+        font-size: 1.2rem;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
 
 # Initialize session state
-if 'todos' not in st.session_state:
-    st.session_state.todos = {
-        'Movies': [
-            {'id': str(uuid.uuid4()), 'task': 'Watch The Shawshank Redemption', 'completed': False, 'created': datetime.now()},
-            {'id': str(uuid.uuid4()), 'task': 'Rewatch Inception', 'completed': True, 'created': datetime.now()},
-        ],
-        'Shows': [
-            {'id': str(uuid.uuid4()), 'task': 'Finish Breaking Bad Season 5', 'completed': False, 'created': datetime.now()},
-            {'id': str(uuid.uuid4()), 'task': 'Start Stranger Things', 'completed': False, 'created': datetime.now()},
-        ],
-        'Music': [
-            {'id': str(uuid.uuid4()), 'task': 'Listen to new Taylor Swift album', 'completed': False, 'created': datetime.now()},
-            {'id': str(uuid.uuid4()), 'task': 'Discover jazz playlist', 'completed': True, 'created': datetime.now()},
-        ],
-        'Games': [
-            {'id': str(uuid.uuid4()), 'task': 'Complete Zelda: Breath of the Wild', 'completed': False, 'created': datetime.now()},
-            {'id': str(uuid.uuid4()), 'task': 'Try new indie games', 'completed': False, 'created': datetime.now()},
-        ]
+if 'media_data' not in st.session_state:
+    st.session_state.media_data = {
+        'Music': [],
+        'Movies': [],
+        'TV Shows': [],
+        'Videogames': []
     }
 
-if 'current_category' not in st.session_state:
-    st.session_state.current_category = 'Movies'
+if 'expanded_tile' not in st.session_state:
+    st.session_state.expanded_tile = None
 
-# Header
-st.markdown('<h1 class="main-header">🌈 Rainbow To-Do List</h1>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">Organize your entertainment goals with style</p>', unsafe_allow_html=True)
+if 'new_item' not in st.session_state:
+    st.session_state.new_item = ""
 
-# Category selection
-categories = ['Movies', 'Shows', 'Music', 'Games']
-category_icons = {'Movies': '🎬', 'Shows': '📺', 'Music': '🎵', 'Games': '🎮'}
-category_colors = {
-    'Movies': '#ff9a9e',
-    'Shows': '#a8e6cf', 
-    'Music': '#ffd3a5',
-    'Games': '#a8c8ec'
-}
+# Tile data
+tiles = [
+    {'name': 'Music', 'class': 'tile-music'},
+    {'name': 'Movies', 'class': 'tile-movies'},
+    {'name': 'TV Shows', 'class': 'tile-tvshows'},
+    {'name': 'Videogames', 'class': 'tile-videogames'}
+]
 
-# Category tabs
-cols = st.columns(4)
-for i, category in enumerate(categories):
-    with cols[i]:
-        if st.button(f"{category_icons[category]} {category}", key=f"tab_{category}"):
-            st.session_state.current_category = category
+# Create the tile interface
+st.markdown('<div class="tile-container">', unsafe_allow_html=True)
 
-# Current category indicator
-current_cat = st.session_state.current_category
-st.markdown(f"""
-<div style="text-align: center; margin: 1rem 0;">
-    <h2 style="color: {category_colors[current_cat]}; font-size: 2rem;">
-        {category_icons[current_cat]} {current_cat}
-    </h2>
-</div>
-""", unsafe_allow_html=True)
+# Create 2x2 grid of tiles
+col1, col2 = st.columns(2)
 
-# Stats overview
-col1, col2, col3, col4 = st.columns(4)
+# Row 1
 with col1:
-    total_tasks = sum(len(tasks) for tasks in st.session_state.todos.values())
-    st.markdown(f"""
-    <div class="stats-card">
-        <h3 style="color: #ff9a9e; margin: 0;">📋 Total</h3>
-        <h2 style="margin: 0.5rem 0; color: #333;">{total_tasks}</h2>
+    # Music tile
+    if st.button("", key="tile_music", help="Click to expand Music"):
+        st.session_state.expanded_tile = "Music" if st.session_state.expanded_tile != "Music" else None
+        st.rerun()
+    
+    st.markdown("""
+    <div class="tile tile-music" style="margin-top: -50px; pointer-events: none;">
+        <div class="tile-title">Music</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col2:
-    completed_tasks = sum(len([t for t in tasks if t['completed']]) for tasks in st.session_state.todos.values())
-    st.markdown(f"""
-    <div class="stats-card">
-        <h3 style="color: #a8e6cf; margin: 0;">✅ Done</h3>
-        <h2 style="margin: 0.5rem 0; color: #333;">{completed_tasks}</h2>
+    # Movies tile
+    if st.button("", key="tile_movies", help="Click to expand Movies"):
+        st.session_state.expanded_tile = "Movies" if st.session_state.expanded_tile != "Movies" else None
+        st.rerun()
+    
+    st.markdown("""
+    <div class="tile tile-movies" style="margin-top: -50px; pointer-events: none;">
+        <div class="tile-title">Movies</div>
     </div>
     """, unsafe_allow_html=True)
 
+# Row 2
+col3, col4 = st.columns(2)
+
 with col3:
-    pending_tasks = total_tasks - completed_tasks
-    st.markdown(f"""
-    <div class="stats-card">
-        <h3 style="color: #ffd3a5; margin: 0;">⏳ Pending</h3>
-        <h2 style="margin: 0.5rem 0; color: #333;">{pending_tasks}</h2>
+    # TV Shows tile
+    if st.button("", key="tile_tvshows", help="Click to expand TV Shows"):
+        st.session_state.expanded_tile = "TV Shows" if st.session_state.expanded_tile != "TV Shows" else None
+        st.rerun()
+    
+    st.markdown("""
+    <div class="tile tile-tvshows" style="margin-top: -50px; pointer-events: none;">
+        <div class="tile-title">TV Shows</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col4:
-    category_tasks = len(st.session_state.todos[current_cat])
-    # Always show "Unstarted" for the fourth card regardless of category
-    st.markdown(f"""
-    <div class="stats-card">
-        <h3 style="color: {category_colors[current_cat]}; margin: 0;">🚀 Unstarted</h3>
-        <h2 style="margin: 0.5rem 0; color: #333;">{category_tasks}</h2>
+    # Videogames tile
+    if st.button("", key="tile_videogames", help="Click to expand Videogames"):
+        st.session_state.expanded_tile = "Videogames" if st.session_state.expanded_tile != "Videogames" else None
+        st.rerun()
+    
+    st.markdown("""
+    <div class="tile tile-videogames" style="margin-top: -50px; pointer-events: none;">
+        <div class="tile-title">Videogames</div>
     </div>
     """, unsafe_allow_html=True)
-
-# Add new task form
-st.markdown('<div class="add-form">', unsafe_allow_html=True)
-st.markdown(f"### ➕ Add New {current_cat} Task")
-
-with st.form(f"add_task_form_{current_cat}"):
-    new_task = st.text_input("What would you like to add to your list?", 
-                            placeholder=f"Enter a new {current_cat.lower()} task...")
-    
-    col1, col2, col3 = st.columns([2, 1, 1])
-    with col2:
-        submitted = st.form_submit_button("Add Task ✨")
-    
-    if submitted and new_task.strip():
-        new_todo = {
-            'id': str(uuid.uuid4()),
-            'task': new_task.strip(),
-            'completed': False,
-            'created': datetime.now()
-        }
-        st.session_state.todos[current_cat].append(new_todo)
-        st.success(f"Added '{new_task}' to {current_cat}! 🎉")
-        st.rerun()
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Display tasks for current category
-if st.session_state.todos[current_cat]:
-    st.markdown(f"### 📝 Your {current_cat} List")
+# Show expanded content below the tiles
+if st.session_state.expanded_tile:
+    tile_name = st.session_state.expanded_tile
     
-    # Create scrollable container
-    st.markdown('<div class="scrollable-container">', unsafe_allow_html=True)
+    st.markdown("---")
+    st.markdown(f"## {tile_name}")
     
-    # Sort tasks: incomplete first, then completed
-    tasks = sorted(st.session_state.todos[current_cat], 
-                  key=lambda x: (x['completed'], -x['created'].timestamp()))
-    
-    for i, todo in enumerate(tasks):
-        col1, col2, col3 = st.columns([0.1, 0.7, 0.2])
+    # Add new item form
+    with st.form(f"add_{tile_name.lower().replace(' ', '_')}", clear_on_submit=True):
+        new_item = st.text_input(f"Add new {tile_name.lower()}", 
+                               placeholder=f"Enter {tile_name.lower()} title...")
         
+        col1, col2, col3 = st.columns([1, 1, 2])
         with col1:
-            # Checkbox for completion
-            checked = st.checkbox("", 
-                                value=todo['completed'], 
-                                key=f"check_{current_cat}_{todo['id']}")
-            
-            if checked != todo['completed']:
-                # Update completion status
-                for task in st.session_state.todos[current_cat]:
-                    if task['id'] == todo['id']:
-                        task['completed'] = checked
-                        break
-                st.rerun()
+            if st.form_submit_button("Add"):
+                if new_item.strip():
+                    new_entry = {
+                        'id': str(uuid.uuid4()),
+                        'title': new_item.strip(),
+                        'added': datetime.now()
+                    }
+                    st.session_state.media_data[tile_name].append(new_entry)
+                    st.success(f"Added '{new_item}' to {tile_name}!")
+                    st.rerun()
         
         with col2:
-            # Task text with styling based on completion
-            task_class = "completed" if todo['completed'] else ""
-            category_class = current_cat.lower()
-            
-            task_style = ""
-            if todo['completed']:
-                task_style = "text-decoration: line-through; opacity: 0.6;"
-            
-            st.markdown(f"""
-            <div class="todo-item {task_class} {category_class}">
-                <p style="margin: 0; font-size: 1.1rem; {task_style}">
-                    {todo['task']}
-                </p>
-                <small style="color: #666;">
-                    Added: {todo['created'].strftime('%Y-%m-%d %H:%M')}
-                </small>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col3:
-            # Delete button
-            if st.button("🗑️", key=f"delete_{current_cat}_{todo['id']}", 
-                        help="Delete this task"):
-                st.session_state.todos[current_cat] = [
-                    t for t in st.session_state.todos[current_cat] 
-                    if t['id'] != todo['id']
-                ]
+            if st.form_submit_button("Close"):
+                st.session_state.expanded_tile = None
                 st.rerun()
     
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Clear completed tasks button
-    completed_in_category = [t for t in st.session_state.todos[current_cat] if t['completed']]
-    if completed_in_category:
-        st.markdown("---")
-        if st.button(f"🧹 Clear Completed {current_cat} Tasks ({len(completed_in_category)})", 
-                    key=f"clear_{current_cat}"):
-            st.session_state.todos[current_cat] = [
-                t for t in st.session_state.todos[current_cat] if not t['completed']
-            ]
-            st.success(f"Cleared {len(completed_in_category)} completed tasks! ✨")
-            st.rerun()
-
-else:
-    # Empty state
-    st.markdown(f"""
-    <div style="text-align: center; padding: 3rem; color: #888;">
-        <h1 style="font-size: 4rem; margin: 0;">{category_icons[current_cat]}</h1>
-        <h3>No {current_cat.lower()} tasks yet!</h3>
-        <p>Add your first task above to get started.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Footer
-st.markdown("---")
-st.markdown("""
-<div style="text-align: center; padding: 1rem; color: #555;">
-    <p>🌈 Made with ❤️ using Streamlit | Stay organized, stay colorful! ✨</p>
-</div>
-""", unsafe_allow_html=True)
+    # Display existing items
+    if st.session_state.media_data[tile_name]:
+        st.markdown(f"### Your {tile_name}")
+        
+        for item in st.session_state.media_data[tile_name]:
+            col1, col2 = st.columns([3, 1])
+            
+            with col1:
+                st.write(f"• {item['title']}")
+            
+            with col2:
+                if st.button("🗑️", key=f"delete_{item['id']}", help="Delete"):
+                    st.session_state.media_data[tile_name] = [
+                        i for i in st.session_state.media_data[tile_name] 
+                        if i['id'] != item['id']
+                    ]
+                    st.rerun()
+    else:
+        st.info(f"No {tile_name.lower()} added yet. Add your first item above!")
